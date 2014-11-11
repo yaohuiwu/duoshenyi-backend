@@ -6,5 +6,6 @@
 
 <hibernate-configuration>
     <session-factory>
+        <mapping class="com.duoshenyi.backend.user.model.User"/>
     </session-factory>
 </hibernate-configuration>

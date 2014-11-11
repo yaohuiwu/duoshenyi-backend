@@ -10,20 +10,15 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 	
-	<artifactId>backend-api</artifactId>
-	<packaging>war</packaging>
+	<artifactId>backend-user</artifactId>
+	<packaging>jar</packaging>
 	
-	<name>Backend API</name>
+	<name>Backend User</name>
 
 	<dependencies>
 
-        <dependency>
-            <groupId>com.duoshenyi.backend</groupId>
-            <artifactId>backend-user</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
 
-        <!-- spring dependencies -->
+		<!-- spring dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -66,17 +61,7 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 		</dependency>
-
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt</artifactId>
-        </dependency>
-
+		
 		<!-- hibernate dependencies -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -105,6 +90,7 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 		</dependency>
+
 
 		<!-- test dependencies -->
 		<dependency>
