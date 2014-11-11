@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/context
+       		http://www.springframework.org/schema/context/spring-context.xsd
+       		http://www.springframework.org/schema/mvc
+       		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+            "
+       default-lazy-init="true">
+    <mvc:annotation-driven />
+	<!-- Enable @Transactional support -->
+	<tx:annotation-driven />
+    <!-- Activates scanning of @Autowired -->
+    <context:annotation-config />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:c3p0.properties</value>
+				<value>classpath:jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!--slave dataSource -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
+		<property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
+		<property name="maxIdleTime" value="${c3p0.maxIdleTime}" />
+		<property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
+		<property name="minPoolSize" value="${c3p0.minPoolSize}" />
+		<property name="acquireRetryDelay" value="1000" />
+		<property name="acquireRetryAttempts" value="60" />
+		<property name="breakAfterAcquireFailure" value="false" />
+		<property name="checkoutTimeout" value="${c3p0.checkoutTimeout}" />
+		<property name="maxStatements" value="50" />
+	</bean>
+
+	<!-- Hibernate SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		destroy-method="destroy">
+		<property name="dataSource" ref="dataSource" />
+		<!--<property name="packagesToScan" value="${project.groupId}" />-->
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+		<!--<property name="hibernateProperties">-->
+			<!--<props>-->
+				<!--<prop key="hibernate.dialect">${hibernate.dialect}</prop>-->
+				<!--<prop key="hibernate.query.substitutions">true 'Y', false 'N'</prop>-->
+				<!-- 
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				 -->
+				<!--<prop key="hibernate.cache.use_query_cache">false</prop>-->
+				<!--<prop key="hibernate.show_sql">true</prop>-->
+				<!--<prop key="hibernate.format_sql">false</prop>-->
+				<!--<prop key="hibernate.hbm2ddl.auto">update</prop>-->
+				<!-- Avoid '** is not valid without active transaction' exception -->
+				<!--<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext-->
+				<!--</prop>-->
+				<!--<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>-->
+			<!--</props>-->
+		<!--</property>-->
+	</bean>
+
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<constructor-arg ref="sessionFactory" />
+	</bean>
+	
+	<!-- Transaction manager for a single Hibernate SessionFactory (alternative 
+		to JTA) -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+</beans>
