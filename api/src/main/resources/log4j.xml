@@ -30,8 +30,8 @@
         <appender-ref ref="file"/>
     </logger>
     
-    <logger name="org.springframework.web.servlet" additivity="false">
-        <level value ="debug"/>
+    <logger name="org.springframework" additivity="false">
+        <level value ="error"/>
         <appender-ref ref="console"/>
     </logger>
 

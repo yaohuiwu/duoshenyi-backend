@@ -46,6 +46,8 @@ public class UserController {
         user.setName(name);
         user.setAccount(account);
 
+        JsonObject resp = new JsonObject();
+
         PasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         String encryptedText = passwordEncryptor.encryptPassword(password);
         user.setPassword(encryptedText.getBytes());
@@ -55,8 +57,9 @@ public class UserController {
             addedU = userManager.addUser(user);
         }catch (UserExistsException uee){
             String respMsg = "user with account["+user.getAccount()+"] already exists.";
+            resp.addProperty("msg",respMsg);
             LOG.warn(respMsg);
-            return new ResponseEntity<>(respMsg,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(resp.toString(),HttpStatus.BAD_REQUEST);
         }
 
         JsonObject jsonUser = new JsonObject();
